@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/courses', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
-        if(err) return err;
+        if(err) return res.status(500).send('Server error');
 
         const courses = JSON.parse(data.toString());
         return res.send(courses);
