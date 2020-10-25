@@ -25,8 +25,8 @@ app.get('/api/courses', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
         if(err) return err;
 
-        const result = JSON.parse(data.toString());
-        return res.send(result);
+        const courses = JSON.parse(data.toString());
+        return res.send(courses);
     })
 });
 
@@ -44,8 +44,8 @@ app.get('/api/courses/:id', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
         if(err) return err;
 
-        const result = JSON.parse(data.toString());
-        const course = result.find(c => c.id === parseInt(req.params.id));
+        const courses = JSON.parse(data.toString());
+        const course = courses.find(c => c.id === parseInt(req.params.id));
         // 404 bad request object not found by convection
         if(!course) return res.status(404).send('The course with the given Id was not found!');
         return res.send(course);
@@ -72,13 +72,13 @@ app.post('/api/courses', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
         if(err) return err;
 
-        const result = JSON.parse(data.toString());
+        const courses = JSON.parse(data.toString());
         const course = {
-            id: result.length + 1,
+            id: courses.length + 1,
             name: req.body.name
         }
-        result.push(course);
-        fs.writeFile('courses.json', JSON.stringify(result), (err) => {
+        courses.push(course);
+        fs.writeFile('courses.json', JSON.stringify(courses), (err) => {
             console.log(err)
         });
         return res.send(course);
@@ -115,12 +115,12 @@ app.put('/api/courses/:id', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
         if(err) return err;
 
-        const result = JSON.parse(data.toString());
-        const course = result.find(c => c.id === +req.params.id);
+        const courses = JSON.parse(data.toString());
+        const course = courses.find(c => c.id === +req.params.id);
         if(!course) return res.status(404).send('The course with the given Id was not found!');
     
         course.name = req.body.name;
-        fs.writeFile('courses.json', JSON.stringify(result), (err) => {
+        fs.writeFile('courses.json', JSON.stringify(courses), (err) => {
             console.log(err)
         });
         return res.send(course);
@@ -143,12 +143,12 @@ app.delete('/api/courses/:id', (req, res) => {
     fs.readFile('courses.json', 'utf-8', (err, data) => {
         if(err) return err;
 
-        const result = JSON.parse(data.toString());
-        const course = result.find(c => c.id === +req.params.id);
+        const courses = JSON.parse(data.toString());
+        const course = courses.find(c => c.id === +req.params.id);
         if(!course) return res.status(404).send('The course with the given Id was not found!');
         const index = courses.indexOf(course);
-        result.splice(index, 1);
-        fs.writeFile('courses.json', JSON.stringify(result), (err) => {
+        courses.splice(index, 1);
+        fs.writeFile('courses.json', JSON.stringify(courses), (err) => {
             console.log(err)
         });
         return res.send(course);
